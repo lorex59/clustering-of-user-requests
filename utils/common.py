@@ -18,7 +18,8 @@ def clear_dataset(df: pd.DataFrame):
     df_mc[one_class_cols] = df_mc[one_class_cols].apply(
         lambda x: x.str.lower()
     )
-
-    df_mc = df_mc.fillna("NaN")
+    df_mc['общие фразы'] = df_mc['общие фразы'].fillna(0).map(
+        {"общая фраза": 1, 0: 0}
+    )
 
     return df_mc

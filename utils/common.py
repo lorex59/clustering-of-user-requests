@@ -1,12 +1,11 @@
 import pandas as pd
 
 def clear_dataset(df: pd.DataFrame):
-    df_mc = df.copy()
-
+    df_mc = df.copy().reset_index(drop=True)
     # метки для мультиклассификации
     for col in ["занятость", "по дополнительному признаку"]:
         col_index = df_mc[~df_mc[col].isna()].index
-        temp_col = f"temp_{col}"
+        display(df_mc.iloc[col_index][col].isna().sum())
         for ind in col_index:
             descr = df_mc[col].iloc[ind]
             item_list = descr.strip(",. ").lower().split(',')

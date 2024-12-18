@@ -5,7 +5,6 @@ def clear_dataset(df: pd.DataFrame):
     # метки для мультиклассификации
     for col in ["занятость", "по дополнительному признаку"]:
         col_index = df_mc[~df_mc[col].isna()].index
-        display(df_mc.iloc[col_index][col].isna().sum())
         for ind in col_index:
             descr = df_mc[col].iloc[ind]
             item_list = descr.strip(",. ").lower().split(',')
@@ -46,4 +45,4 @@ def prepare_dataset(data_: pd.DataFrame):
         "по условиям": cond_type,
     }
 
-    return data, target_cats
+    return data['query'], target_cats

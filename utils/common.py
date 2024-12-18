@@ -22,3 +22,28 @@ def clear_dataset(df: pd.DataFrame):
     )
 
     return df_mc
+
+def prepare_dataset(data_: pd.DataFrame):
+    data = data_.copy()
+
+    for col in ["по должности-лемме", "по условиям"]:
+        data[col] = data[col].fillna("None")
+
+    for col in ["занятость", "по дополнительному признаку"]:
+        data[col] = data[col].apply(lambda d: d if isinstance(d, list) else [])
+
+    work_type = data.pop("по должности-лемме")
+    cond_type = data.pop("по условиям")
+    add_type = data.pop("по дополнительному признаку")
+    occ_type = data.pop("занятость")
+    common_type = data.pop("общие фразы")
+
+    target_cats = {
+        "занятость": occ_type,
+        "по должности-лемме": work_type,
+        "по дополнительному признаку": add_type,
+        "общие фразы": common_type,
+        "по условиям": cond_type,
+    }
+
+    return data, target_cats

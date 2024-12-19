@@ -1,4 +1,6 @@
 import pandas as pd
+from pymorphy3 import MorphAnalyzer
+
 
 def clear_dataset(df: pd.DataFrame):
     df_mc = df.copy().reset_index(drop=True)
@@ -46,3 +48,25 @@ def prepare_dataset(data_: pd.DataFrame):
     }
 
     return data['query'], target_cats
+
+
+def pred_labels_for_busy(binary_vector):
+    labels = ['вахта', 'вечерняя', 'временная', 'дневная', 'на дому', 
+            'на неполный день', 'ночная', 'по выходным', 'подработка', 
+          'посменная', 'посуточная', 'удаленная']
+    selected_labels = [labels[i] for i in range(len(binary_vector)) if binary_vector[i] == 1]
+    return ", ".join(selected_labels)
+
+
+def pred_labels_for_additional_feature(binary_vector):
+    labels = ['без опыта', 'для женщин', 'для инвалидов', 'для мужчин',
+       'для пенсионеров', 'для студентов', 'для школьников']
+    selected_labels = [labels[i] for i in range(len(binary_vector)) if binary_vector[i] == 1]
+    return ", ".join(selected_labels)
+
+
+def lemmatize_sentence(sentence):
+    morph = MorphAnalyzer()
+    words = sentence.split()  
+    lemmas = [morph.parse(word)[0].normal_form for word in words]  
+    return ' '.join(lemmas)
